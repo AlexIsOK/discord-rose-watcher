@@ -6,7 +6,7 @@ const path = require("path");
 const auth = require("./auth.json");
 
 const master = new Master(path.resolve("./worker.js"), {
-    token: auth,
+    token: auth.token,
     shards: 1, //the bot will only be in 1 or 2 servers so sharding doesn't matter
     cache: {
         guilds: true,
