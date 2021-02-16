@@ -160,7 +160,7 @@ worker.commands
                 try {
                     let e = await eval(ctx.args.join(" "));
                     let inspected = inspect(e);
-                    inspected = inspected.replace(new RegExp(auth.token, 'g'), "bruh").slice(0, 1990)
+                    inspected = inspected.replace(new RegExp(auth, 'g'), "bruh").slice(0, 1990)
                     await console.log(inspected);
                     await ctx.reply("```\n" + inspected + "\n```");
                 } catch(e) {
