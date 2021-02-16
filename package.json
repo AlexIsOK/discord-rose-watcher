@@ -1,0 +1,27 @@
+{
+  "name": "discord-rose-helper",
+  "version": "1.0.0",
+  "description": "Watches discord-rose and links to the latest version",
+  "main": "index.js",
+  "dependencies": {
+    "discord-rose": "^0.0.10",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexisok/d-rose_watcher.git"
+  },
+  "keywords": [
+    "discord-rose"
+  ],
+  "author": "AlexIsOK",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/alexisok/d-rose_watcher/issues"
+  },
+  "homepage": "https://github.com/alexisok/d-rose_watcher#readme"
+}
