@@ -4,7 +4,7 @@ const {inspect} = require("util");
 
 const worker = new Worker();
 
-const auth = require("./auth.json");
+const auth = process.env.token;
 
 /**
  * Get the latest version of a specific middleware
