@@ -3,10 +3,8 @@
 const Master = require("discord-rose/master");
 const path = require("path");
 
-const authorization = require("./auth.json");
-
 const master = new Master(path.resolve("./worker.js"), {
-    token: authorization.token,
+    token: process.env.token,
     shards: 1, //the bot will only be in 1 or 2 servers so sharding doesn't matter
     cache: {
         guilds: true,
@@ -18,4 +16,4 @@ const master = new Master(path.resolve("./worker.js"), {
     }
 });
 
-master.start().then(r => console.log("Started d-rose watcher."));
+master.start().then(() => console.log("Started d-rose watcher."));
