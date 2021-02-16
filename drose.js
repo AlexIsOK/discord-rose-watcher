@@ -3,10 +3,10 @@
 const Master = require("discord-rose/master");
 const path = require("path");
 
-const token = process.env.token;
+const auth = require("./auth.json");
 
 const master = new Master(path.resolve("./worker.js"), {
-    token: token,
+    token: auth,
     shards: 1, //the bot will only be in 1 or 2 servers so sharding doesn't matter
     cache: {
         guilds: true,
