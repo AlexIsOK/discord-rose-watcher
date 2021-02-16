@@ -19,7 +19,3 @@ const master = new Master(path.resolve("./worker.js"), {
 });
 
 master.start().then(() => console.log("Started d-rose watcher."));
-
-module.exports = {
-    token
-}
