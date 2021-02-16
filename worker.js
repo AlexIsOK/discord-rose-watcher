@@ -159,8 +159,8 @@ worker.commands
             if(ctx.member.user.id === "541763812676861952") {
                 try {
                     let e = await eval(ctx.args.join(" "));
-                    let inspected = inspect(e);                                         //fake token btw
-                    inspected = inspected.replace(new RegExp(auth, 'g'), "ODEwMjk4MzM5NjkzODIyMDEy.YChnIg.BHqeYN0aGtSmsHlYwZA8pZYjssA").slice(0, 1990)
+                    let inspected = inspect(e);
+                    inspected = inspected.replace(new RegExp(auth, 'g'), "NoToken4U").slice(0, 1990)
                     await console.log(inspected);
                     await ctx.reply("```\n" + inspected + "\n```");
                 } catch(e) {
