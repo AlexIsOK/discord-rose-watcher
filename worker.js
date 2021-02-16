@@ -4,7 +4,7 @@ const {inspect} = require("util");
 
 const worker = new Worker();
 
-const auth = process.env.token;
+const auth = require("./drose").token;
 
 /**
  * Get the latest version of a specific middleware
