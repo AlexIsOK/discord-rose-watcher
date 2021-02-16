@@ -7,17 +7,53 @@ const worker = new Worker();
 const auth = require("./auth.json");
 
 /**
- * Get the version of the middleware
+ * Get the latest version of a specific middleware
  * @param name the name of the middleware
+ * @return {Promise<String>} the version of the middleware
  */
 async function getMiddlewareVersion(name) {
     return (await fetch("https://registry.npmjs.org/@discord-rose/" + name)
         .then(res => res.json()))["dist-tags"].latest;
 }
 
+/**
+ * Get the GitHub repository of the middleware
+ * @param name the name of the middleware
+ * @returns {Promise<string>} the URL of the repo with a trailing `.git`
+ */
+async function getMiddlewareGithub(name) {
+    return (await fetch("https://registry.npmjs.org/@discord-rose/" + name)
+        .then(res => res.json())).repository.url.substr(4); //starts with `git+`
+}
+
+/**
+ * Get the maintainers of the package as an array
+ * @param name the name of the middleware
+ * @returns {Promise<Array>} the array of maintainers
+ */
+async function getMiddlewareMaintainers(name) {
+    const maintainersRaw = (await fetch("https://registry.npmjs.org/@discord-rose/" + name)
+        .then(res => res.json())).maintainers;
+    
+    return maintainersRaw.map(m => m.name);
+}
+
+//the base registry url for api requests
 const BASE_REGISTRY_URL = "https://registry.npmjs.com";
 
+//base for middleware packages
+const BASE_MW = "https://www.npmjs.com/package/@discord-rose";
+
+//zero width characters for embeds
 const ZERO_WIDTH_CHARACTER = "\u200E";
+
+//the middlewares as a map (YES, A MAP, NOT AN OBJECT XYOYU)
+const MIDDLEWARES = {
+    "cooldown": "cooldown-middleware",
+    "permission": "permissions-middleware",
+    "admin": "admin-middleware",
+    "flag": "flags-middleware"
+}
 
 //add commands
 worker.commands
@@ -37,6 +73,32 @@ worker.commands
             let admin = await getMiddlewareVersion("admin-middleware");
             let flags = await getMiddlewareVersion("flags-middleware");
             
+            //remove a leading s from the arg if it has one
+            if(ctx.args[0] && ctx.args[0].toLowerCase().endsWith("s"))
+                ctx.args[0] = ctx.args[0].substr(0, ctx.args[0].length - 1)
+            
+            //check if the user is checking for a specific package
+            //this will do something else if the package exists
+            if(ctx.args[0] && MIDDLEWARES[ctx.args[0].toLowerCase()]) {
+                const name = ctx.args[0].toLowerCase();
+                
+                //info for the embeds
+                const maintainers = await getMiddlewareMaintainers(MIDDLEWARES[name]);
+                const version = `[${await getMiddlewareVersion(MIDDLEWARES[name])}](${BASE_MW}/${MIDDLEWARES[name]})`;
+                const github = await getMiddlewareGithub(MIDDLEWARES[name]);
+                
+                //send the thingy so people can see the lastest version i guess
+                await ctx.embed
+                    .title(ctx.args[0])
+                    .description(`**__${name.charAt(0).toUpperCase()}${name.slice(1)}__**`) //capitalize first letter
+                    .field("Version", version, true)
+                    .field("Repository", `[GitHub](${github})`, true)
+                    .field("Maintainers", `${maintainers.join(", ")}`, true)
+                    .color(0x00FF00)
+                    .send(true);
+                return;
+            }
+            
             //post the latest versions of the packages along with
             //a link to the package for convenience
             await ctx.embed
@@ -54,7 +116,7 @@ worker.commands
     .add({ //get the ping of the bot
         command: 'ping',
         aliases: [
-            "pings", "pong"
+            "pings", "pong", "pongs"
         ],
         exec: (async ctx => {
             let ping = worker.shards.first().ping;
@@ -73,10 +135,13 @@ worker.commands
             "download"
         ],
         exec: (async ctx => {
+            
+            //downloads object
+            let lastDay = await fetch("https://api.npmjs.org/downloads/point/last-day/discord-rose").then(res => res.json());
             let lastWeek = await fetch("https://api.npmjs.org/downloads/point/last-week/discord-rose").then(res => res.json());
             let lastYear = await fetch("https://api.npmjs.org/downloads/point/last-year/discord-rose").then(res => res.json());
-            let lastDay = await fetch("https://api.npmjs.org/downloads/point/last-day/discord-rose").then(res => res.json());
             
+            //display the downloads
             await ctx.embed.title("Downloads for Discord Rose")
                 .description("```\n" +
                     "Last day:  " + lastDay.downloads + "\n" +
@@ -87,7 +152,7 @@ worker.commands
                 .send(true);
         })
     })
-    .add({
+    .add({ //eval command (why bother documenting this)
         command: 'eval',
         exec: (async ctx => {
             console.log(ctx.member.user.id);
@@ -105,5 +170,20 @@ worker.commands
             } else {
                 await ctx.reply("cringe");
             }
+        })
+    })
+    .add({ //help command
+        command: 'help',
+        exec: (async ctx => {
+            ctx.embed
+                .title("Discord Rose Watcher")
+                .description("The following commands are available for Discord Rose Watcher\n" +
+                    "```\n" +
+                    "=downloads - get the amount of downloads for d-rose.\n" +
+                    "=versions [middleware] - get the current versions for d-rose and middleware.\n" +
+                    "=ping - get the ping of the bot.\n" +
+                    "=help - get the commands for the bot.\n" +
+                    "```\n" +
+                    "Commands also have non-plural versions to avoid confusion.")
         })
     });

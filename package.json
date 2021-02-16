@@ -1,8 +1,8 @@
 {
   "name": "discord-rose-helper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Watches discord-rose and links to the latest version",
-  "main": "index.js",
+  "main": "drose.js",
   "dependencies": {
     "discord-rose": "^0.0.10",
     "node-fetch": "^2.6.1"
