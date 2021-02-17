@@ -95,7 +95,7 @@ worker.commands
                     .field("Repository", `[GitHub](${github})`, true)
                     .field("Maintainers", `${maintainers.join(", ")}`, true)
                     .color(0x00FF00)
-                    .send(true);
+                    .send(false);
                 return;
             }
             
@@ -110,7 +110,7 @@ worker.commands
                 .field("Admin", `[${admin}](https://www.npmjs.com/package/@discord-rose/admin-middleware)`, true)
                 .field("Flags", `[${flags}](https://www.npmjs.com/package/@discord-rose/flags-middleware)`, true)
                 .color(0x00FF00)
-                .send(true);
+                .send(false);
         })
     })
     .add({ //get the ping of the bot
@@ -126,7 +126,7 @@ worker.commands
                 .description(`Current ping is ${ping}ms.`)
                 .thumbnail(ping < 20 ? "https://media.discordapp.net/attachments/696529468247769151/811006605827113000/unknown.png" : null)
                 .color(0x00FF00)
-                .send(true);
+                .send(false);
         })
     })
     .add({ //get the daily, weekly, and yearly downloads for d-rose
@@ -149,7 +149,7 @@ worker.commands
                     "Last year: " + lastYear.downloads + "\n" +
                     "```")
                 .color(0x00FF00)
-                .send(true);
+                .send(false);
         })
     })
     .add({ //eval command (why bother documenting this)
@@ -175,7 +175,7 @@ worker.commands
     .add({ //help command
         command: 'help',
         exec: (async ctx => {
-            ctx.embed
+            await ctx.embed
                 .title("Discord Rose Watcher")
                 .description("The following commands are available for Discord Rose Watcher\n" +
                     "```\n" +
@@ -185,5 +185,6 @@ worker.commands
                     "=help - get the commands for the bot.\n" +
                     "```\n" +
                     "Commands also have non-plural versions to avoid confusion.")
+                .send(false)
         })
     });
