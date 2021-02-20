@@ -64,6 +64,7 @@ worker.commands
             "versions"
         ],
         exec: (async ctx => {
+            worker.api.channels.typing(ctx.channel.id);
             //base version for d-rose
             let dRoseBase = (await fetch(`${BASE_REGISTRY_URL}/discord-rose`).then(res => res.json()))["dist-tags"].latest;
             

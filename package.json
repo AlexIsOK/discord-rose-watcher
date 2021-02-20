@@ -4,7 +4,7 @@
   "description": "Watches discord-rose and links to the latest version",
   "main": "drose.js",
   "dependencies": {
-    "discord-rose": "^0.0.12",
+    "discord-rose": "^0.0.15",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {},
