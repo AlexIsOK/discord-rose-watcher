@@ -189,3 +189,9 @@ worker.commands
                 .send(false)
         })
     });
+
+worker.on('MESSAGE_CREATE', (message) => {
+  if (message.channel_id === '810952830101356544' && message.embeds[0].description.match(/(docs|build): (tsc|api docs) build/)) {
+    worker.api.messages.delete(message.channel_id, message.id)
+  }
+})
